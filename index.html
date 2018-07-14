@@ -2,7 +2,8 @@
 <html>
     <head>
       <title>Gifs</title>
-<link rel="stylesheet" href="main.js">
+<link rel="stylesheet" href="style.css">
+<script type="text/javascript" src="main.js"></script>
 
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -16,9 +17,100 @@
     </head>
     <body>
 
-        
-      <footer>
 
-      </footer>  
-    </body>
+            <div class="row">
+                    <div class="col-sm-12">
+                      <br>
+                      <!-- First panel is for handling the search parameters -->
+                      <div class="card">
+                        <div class="card-header">
+                          <strong>
+                            <i class="fa fa-list-alt"></i> Search Gifs</strong>
+                        </div>
+                        <div class="card-body">
+              
+                          <!--create an HTML Form for handling the inputs-->
+                          <form role="form">
+              
+                            <!--create the text box for capturing the search term-->
+                            <div class="form-group">
+                              <label for="search">Search</label>
+                              <input type="text" class="form-control" id="search-term">
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+            <button data-gif="Gif">
+                    
+                  </button>
+        
+
+
+            <div id="gifs-appear-here">
+                </div>
+              
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                <script type="text/javascript">
+                $("button").on("click", function() {
+    
+    var gif = $(this).attr("data-gif");
+
+ 
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+      gif + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    })
+    
+      .then(function(response) {
+    
+        var results = response.data;
+
+        // Looping over every result item
+        for (var i = 0; i < results.length; i++) {
+
+          // Only taking action if the photo has an appropriate rating
+          if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+            // Creating a div with the class "item"
+            var gifDiv = $("<div class='item'>");
+
+            // Storing the result item's rating
+            var rating = results[i].rating;
+
+            // Create p tag with the result item's rating
+            var p = $("<p>").text("Rating: " + rating);
+
+            // Creating an image tag
+            var gifImage = $("<img>");
+
+            // Giving the image tag an src attribute of a proprty pulled off the
+            // result item
+            gifImage.attr("src", results[i].images.fixed_height.url);
+
+            // Appending the paragraph and personImage we created to the "gifDiv" div we created
+            gifDiv.append(p);
+            gifDiv.append(gifImage);
+
+            // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
+            $("#gifs-appear-here").prepend(gifDiv);
+          }
+        }
+      });
+  });
+                </script>
+
+
+
+        
+        <div id="images">
+        </div>
+       
+      </body>
+      
 </html>
